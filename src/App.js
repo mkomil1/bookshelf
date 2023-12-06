@@ -1,23 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { Alert, Button, LinearProgress } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
+import { Registry } from "./pages";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { themeSettings } from "./theme";
+import { useMainContext } from "./context/MainContext";
+import { fetchUserInfo } from "./api";
+import { useEffect, useRef, useState } from "react";
+import Home from "./pages/Home";
+import md5 from "md5";
 function App() {
+  const { setUser, user, key, primaryKey } = useMainContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const header = {
+    Key: key ? key : "",
+    Sign: primaryKey ? md5(`GET/myself${primaryKey}`) : "",
+  };
+
+  const getUserInfo = async (header) => {
+    try {
+      setIsLoading(true);
+      const {
+        data: { data },
+      } = await fetchUserInfo(header);
+      setUser(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (key) {
+      getUserInfo(header);
+    }
+  }, []);
+  const theme = createTheme({
+    components: {
+      overrides: {
+        MuiInputBase: {
+          input: {
+            background: "#000",
+            padding: 10,
+            color: "red",
+            height: "10px",
+          },
+        },
+      },
+    },
+  });
+
+  if(!key) {
+    return <Registry />
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {isLoading && <LinearProgress />}
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+      </ThemeProvider>
     </div>
   );
 }
