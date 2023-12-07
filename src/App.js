@@ -6,6 +6,7 @@ import { createTheme } from "@mui/material/styles";
 import { useMainContext } from "./context/MainContext";
 import { useEffect } from "react";
 import Home from "./pages/Home";
+
 function App() {
   const { user, key, isLogged, getUserInfo, getUserBooks, header, isLoading } =
     useMainContext();
@@ -32,6 +33,9 @@ function App() {
     },
   });
 
+  if (!isLogged) {
+    return <Registry />;
+  }
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -46,13 +50,9 @@ function App() {
             }}
           />
         )}
-        {!isLogged ? (
-          <Registry />
-        ) : (
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
-        )}
       </ThemeProvider>
     </div>
   );
