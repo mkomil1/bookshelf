@@ -40,8 +40,7 @@ const initialValuesLogin = {
 };
 
 const Registry = () => {
-  const { setUser, setIsLogged, isDisable, setIsDisable } = useMainContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const { setUser, setIsLogged, isDisable, setIsDisable, isLoading, setIsLoading } = useMainContext();
   const [pageType, setPageType] = useState("register");
   const [errorMsg, setErrorMsg] = useState("");
   const isLogin = pageType === "login";

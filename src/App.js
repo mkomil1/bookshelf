@@ -32,9 +32,6 @@ function App() {
     },
   });
 
-  if (!isLogged) {
-    return <Registry />;
-  }
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -49,9 +46,13 @@ function App() {
             }}
           />
         )}
+        {!isLogged ? (
+          <Registry />
+        ) : (
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
+        )}
       </ThemeProvider>
     </div>
   );

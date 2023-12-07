@@ -122,9 +122,9 @@ export const MainContextProvider = ({ children }) => {
     }
   };
 
-  const searchUserBooks = userBooks.filter((c) =>
+  const searchUserBooks = userBooks ? userBooks.filter((c) =>
     c.book.title.toLowerCase().includes(searchValue.toLowerCase().trim())
-  );
+  ) : []
 
   const contextValue = {
     setUser,
