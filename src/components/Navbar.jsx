@@ -64,7 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-  const { handleSearchBooks, setIsLogged, user } = useMainContext();
+  const { setIsLogged, user, setSearchValue } = useMainContext();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -72,7 +72,6 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const handleTextDobounce = useCallback(debounce(handleSearchBooks, 2000), []);
 
   return (
     <>
@@ -127,7 +126,7 @@ const Navbar = () => {
             <StyledInputBase
               placeholder="Search for any training you want "
               inputProps={{ "aria-label": "search" }}
-              onChange={(e) => handleTextDobounce(e.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </Search>
         </Box>
@@ -169,11 +168,7 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem>
-                <Typography
-                  textAlign="center"
-                >
-                  {user.name}
-                </Typography>
+                <Typography textAlign="center">{user.name}</Typography>
               </MenuItem>
 
               <MenuItem>

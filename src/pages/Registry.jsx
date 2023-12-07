@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Divider,
-  TextField,
   Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
@@ -41,7 +40,7 @@ const initialValuesLogin = {
 };
 
 const Registry = () => {
-  const { setUser, setIsLogged } = useMainContext();
+  const { setUser, setIsLogged, isDisable, setIsDisable } = useMainContext();
   const [isLoading, setIsLoading] = useState(false);
   const [pageType, setPageType] = useState("register");
   const [errorMsg, setErrorMsg] = useState("");
@@ -49,12 +48,14 @@ const Registry = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    setIsDisable(true);
     try {
       const {
         data: { data },
       } = await postUserInfo(values);
       onSubmitProps.resetForm();
       setErrorMsg("");
+      setIsDisable(false);
       if (data) {
         setPageType("login");
       }
@@ -67,6 +68,7 @@ const Registry = () => {
   const login = async (values, onSubmitProps) => {
     const { key, secret } = values;
     try {
+      setIsDisable(true);
       const header = {
         Key: key,
         Sign: md5(`GET/myself${secret}`),
@@ -80,6 +82,7 @@ const Registry = () => {
       setIsLogged(Boolean(data.key));
       onSubmitProps.resetForm();
       setErrorMsg("");
+      setIsDisable(false);
     } catch (error) {
       console.log(error);
       setErrorMsg(error.response.data.message);
@@ -336,6 +339,7 @@ const Registry = () => {
                 }}
                 variant="contained"
                 type="submit"
+                disabled={isDisable}
               >
                 {isLogin ? "Sign in" : "Sign up"}
               </Button>
