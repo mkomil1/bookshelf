@@ -15,7 +15,7 @@ import {
   postBook,
 } from "../api";
 import md5 from "md5";
-
+import { useSnackbar } from "notistack";
 export const MainContext = createContext({});
 
 export const useMainContext = () => {
@@ -30,8 +30,9 @@ export const MainContextProvider = ({ children }) => {
   const [userBooks, setUserBooks] = useState([]);
   const [isLogged, setIsLogged] = useState(Boolean(key));
   const [isLoading, setIsLoading] = useState(true);
-  const [isDisbable, setIsDisable] = useState(false)
+  const [isDisbable, setIsDisable] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const header = (url) => {
     const header = {
@@ -99,8 +100,10 @@ export const MainContextProvider = ({ children }) => {
     try {
       const { data } = await postBook(header, { isbn: isbn });
       getNewUsersBooks();
+      if (data.isOk) {
+        enqueueSnackbar("New book added", { variant: "success" });
+      }
       setbooks([]);
-      return data;
     } catch (error) {
       console.log(error);
     }
@@ -119,12 +122,9 @@ export const MainContextProvider = ({ children }) => {
     }
   };
 
-
   const searchUserBooks = userBooks.filter((c) =>
-        c.book.title.toLowerCase().includes(searchValue.toLowerCase().trim())
-      )
-      
-
+    c.book.title.toLowerCase().includes(searchValue.toLowerCase().trim())
+  );
 
   const contextValue = {
     setUser,
@@ -147,7 +147,8 @@ export const MainContextProvider = ({ children }) => {
     isDisbable,
     setIsDisable,
     searchUserBooks,
-    setSearchValue
+    setSearchValue,
+    enqueueSnackbar,
   };
   return (
     <MainContext.Provider value={contextValue}>{children}</MainContext.Provider>

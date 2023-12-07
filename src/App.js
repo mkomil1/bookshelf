@@ -6,7 +6,6 @@ import { createTheme } from "@mui/material/styles";
 import { useMainContext } from "./context/MainContext";
 import { useEffect } from "react";
 import Home from "./pages/Home";
-
 function App() {
   const { user, key, isLogged, getUserInfo, getUserBooks, header, isLoading } =
     useMainContext();
@@ -17,7 +16,6 @@ function App() {
       getUserBooks(header("books"));
     }
   }, []);
-
 
   const theme = createTheme({
     components: {
@@ -51,9 +49,9 @@ function App() {
             }}
           />
         )}
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
       </ThemeProvider>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import FlexBetween from "../ui/FlexBetween";
 import {
@@ -41,15 +41,23 @@ function BookList({ book, idx, addBook }) {
 }
 
 const Home = () => {
-  const { books, addBook, handleSearchBooks, userBooks, removeBook, searchUserBooks } =
-    useMainContext();
+  const {
+    books,
+    addBook,
+    handleSearchBooks,
+    userBooks,
+    removeBook,
+    searchUserBooks,
+    enqueueSnackbar,
+  } = useMainContext();
 
   const handleTextDobounce = useCallback(debounce(handleSearchBooks, 2000), []);
 
+  const searchInput = useRef();
 
   return (
     <>
-      <Navbar  />
+      <Navbar />
       <Box padding="1rem 6%">
         <FlexBetween>
           <FlexBetween gap="10px">
@@ -84,6 +92,7 @@ const Home = () => {
                 }}
                 placeholder="Enter your name"
                 onChange={(e) => handleTextDobounce(e.target.value)}
+                ref={searchInput}
               />
               <Box
                 sx={{
@@ -126,6 +135,7 @@ const Home = () => {
               }}
               variant="contained"
               startIcon={<AddIcon />}
+              onClick={() => enqueueSnackbar("Coming soon", { variant: "info" })}
             >
               Create a book
             </Button>
