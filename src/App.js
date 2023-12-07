@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import Home from "./pages/Home";
 import md5 from "md5";
 function App() {
-  const { setUser, user, key, primaryKey } = useMainContext();
+  const { setUser, user, key, primaryKey, isLogged } = useMainContext();
   const [isLoading, setIsLoading] = useState(false);
   const header = {
     Key: key ? key : "",
@@ -32,7 +32,7 @@ function App() {
   };
   useEffect(() => {
     if (key) {
-      getUserInfo(header);
+      // getUserInfo(header);
     }
   }, []);
   const theme = createTheme({
@@ -50,14 +50,14 @@ function App() {
     },
   });
 
-  if(!key) {
+  if(!isLogged) {
     return <Registry />
   }
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {isLoading && <LinearProgress />}
+        {isLoading && <LinearProgress sx={{position: "absolute", top:"0px", left: "0px", width: "100%"}} />}
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
