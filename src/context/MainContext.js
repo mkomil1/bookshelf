@@ -28,7 +28,7 @@ export const MainContextProvider = ({ children }) => {
   const [userBooks, setUserBooks] = useState([]);
   const [isLogged, setIsLogged] = useState(Boolean(key));
   const [isLoading, setIsLoading] = useState(true);
-  const [isDisbable, setIsDisable] = useState(false);
+  const [isDisable, setIsDisable] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const header = (url) => {
@@ -38,6 +38,8 @@ export const MainContextProvider = ({ children }) => {
     };
     return header;
   };
+
+  console.log(isDisable);
 
   const getUserInfo = async (header) => {
     try {
@@ -155,7 +157,7 @@ export const MainContextProvider = ({ children }) => {
     setIsLoading,
     userBooks,
     removeBook,
-    isDisbable,
+    isDisable,
     setIsDisable,
     searchUserBooks,
     setSearchValue,
