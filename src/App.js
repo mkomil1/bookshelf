@@ -14,9 +14,10 @@ function App() {
   useEffect(() => {
     if (key) {
       getUserInfo(header("myself"));
-      getUserBooks(header("books"));
+      if (user) getUserBooks(header("books"));
     }
-  }, []);
+  }, [key]);
+  
 
   const theme = createTheme({
     components: {
@@ -50,9 +51,9 @@ function App() {
             }}
           />
         )}
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
       </ThemeProvider>
     </div>
   );

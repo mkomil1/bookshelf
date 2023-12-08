@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import FlexBetween from "../ui/FlexBetween";
 import {
   Avatar,
   Badge,
   Box,
   IconButton,
-  Input,
   InputBase,
   Menu,
   MenuItem,
@@ -17,9 +16,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import { deepPurple } from "@mui/material/colors";
 import { styled, alpha } from "@mui/material/styles";
 import { useMainContext } from "../context/MainContext";
-import { debounce } from "lodash";
 import { removeItem } from "../helpers/persistance-storage";
-import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

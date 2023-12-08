@@ -2,8 +2,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useMemo,
   useState,
 } from "react";
 import { getItem } from "../helpers/persistance-storage";
@@ -33,7 +31,6 @@ export const MainContextProvider = ({ children }) => {
   const [isDisbable, setIsDisable] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-
   const header = (url) => {
     const header = {
       Key: key ? key : "",
@@ -89,7 +86,13 @@ export const MainContextProvider = ({ children }) => {
     }
   };
 
-  const getNewUsersBooks = useCallback(() => getUserBooks(header("books")), []);
+  const getNewUsersBooks = useCallback((key, primaryKey) => {
+    const header = {
+      Key: key ? key : "",
+      Sign: primaryKey ? md5(`GET/books${primaryKey}`) : "",
+    };
+    getUserBooks(header);
+  }, []);
 
   const addBook = async (isbn) => {
     const isbnJ = JSON.stringify({ isbn: String(isbn) });
@@ -99,13 +102,19 @@ export const MainContextProvider = ({ children }) => {
     };
     try {
       const { data } = await postBook(header, { isbn: isbn });
-      getNewUsersBooks();
+      getNewUsersBooks(key, primaryKey);
       if (data.isOk) {
         enqueueSnackbar("New book added", { variant: "success" });
       }
       setbooks([]);
     } catch (error) {
       console.log(error);
+      let errMsg = error?.response?.data?.message;
+      if (errMsg == "Book with this isbn already exists") {
+        enqueueSnackbar("this is a book already exists", {
+          variant: "warning",
+        });
+      }
     }
   };
 
@@ -122,9 +131,11 @@ export const MainContextProvider = ({ children }) => {
     }
   };
 
-  const searchUserBooks = userBooks ? userBooks.filter((c) =>
-    c.book.title.toLowerCase().includes(searchValue.toLowerCase().trim())
-  ) : []
+  const searchUserBooks = userBooks
+    ? userBooks.filter((c) =>
+        c.book.title.toLowerCase().includes(searchValue.toLowerCase().trim())
+      )
+    : [];
 
   const contextValue = {
     setUser,

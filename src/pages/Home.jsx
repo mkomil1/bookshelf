@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import FlexBetween from "../ui/FlexBetween";
 import {
@@ -50,10 +50,9 @@ const Home = () => {
     searchUserBooks,
     enqueueSnackbar,
   } = useMainContext();
+  
 
   const handleTextDobounce = useCallback(debounce(handleSearchBooks, 2000), []);
-
-  const searchInput = useRef();
 
   return (
     <>
@@ -92,7 +91,6 @@ const Home = () => {
                 }}
                 placeholder="Enter your name"
                 onChange={(e) => handleTextDobounce(e.target.value)}
-                ref={searchInput}
               />
               <Box
                 sx={{
@@ -106,9 +104,15 @@ const Home = () => {
                   overflow: "auto",
                   zIndex: 100,
                   marginTop: "10px",
-                  "&::-webkit-scrollbar": {
-                    width: "0.5em",
+                  '&::-webkit-scrollbar': {
+                    width: '.4rem'
                   },
+                  "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                    borderRadius: 8,
+                    backgroundColor: "#333",
+                    minHeight: 24,
+                  },
+                  visibility: books.length ? "visible" : "hidden"
                 }}
               >
                 {books &&
